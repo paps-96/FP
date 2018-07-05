@@ -87,6 +87,11 @@ public class Login extends JFrame {
 						errormsg.setText("");
 						activeuser=userlist.get(uname.getText());
 						dispose();
+						/*if (userlist.get(uname.getText()) instanceof Admin ) {
+							System.out.println("admin");
+						}else {
+							System.out.println("user");
+						}*/
 						MainMenu m=new MainMenu(userlist);
 						m.init();
 						
