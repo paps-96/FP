@@ -87,8 +87,14 @@ public class Login extends JFrame {
 						errormsg.setText("");
 						activeuser=userlist.get(uname.getText());
 						dispose();
-						MainMenu m=new MainMenu(userlist);
-						m.init();
+						if (userlist.get(uname.getText()) instanceof Admin ) {
+							MainMenu m=new MainMenu(userlist);
+							m.init();
+						}else {
+							UserMenu u=new UserMenu(userlist);
+							u.init();
+						}
+						
 						
 					}else {
 						errormsg.setForeground(Color.RED);
