@@ -4,6 +4,7 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -22,6 +23,13 @@ import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
+
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
 
 public class BuildingPanel extends JTabbedPane {
 	
@@ -106,10 +114,62 @@ public class BuildingPanel extends JTabbedPane {
         adduser.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			  {
+				int allws=0;
+				int empl=0;
+				for (Floor f:b.floors.values()) {
+					FloorPanel l=new FloorPanel(f,buildinglist,b);
+					//l.init();
+					allws+=f.ws.size();
+					try {
+						empl+=l.setColor().size();
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+				int avws=allws-empl;
 
+				Document document = new Document(PageSize.A6);
 
-				// TODO Auto-generated method stub
+				
+				try {
+					PdfWriter.getInstance(document, new FileOutputStream(b.name+".pdf"));
+					document.open();
+					Paragraph hello=new Paragraph("Building: "+ b.name);
+					hello.add("\n");
+					hello.add("Adress: "+b.address);
+					hello.add("\n");
+					hello.add("\n");
+					hello.add("Report for Building: "+b.name);
+					hello.add("\n");
+					hello.add("\n");
+					hello.add("\n");
+					hello.add("\n");
+					hello.add("Number of employees: " + Integer.toString(empl));
+					hello.add("\n");
+					hello.add("Number of worksations: "+ Integer.toString(allws));
+					hello.add("\n");
+					hello.add("Available worksations: "+ Integer.toString(avws));
+					//PdfContentByte canvas = writer.getDirectContentUnder();
+					Image image = Image.getInstance("src/menu.png");
+					//image.scaleAbsolute(PageSize.A6.getBorderWidth(),10);
+					//image.setAbsolutePosition(0, 0);
+					image.scaleToFit(240, 150);
+					document.add(image);
+					document.add(hello);
+					
+					
 
+				} catch (FileNotFoundException | DocumentException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				 
+				document.close();
+				
 				
 			  }
 			});
@@ -136,7 +196,7 @@ public class BuildingPanel extends JTabbedPane {
     
 	public void buildingtab(Floor f) {
 		
-		  FloorPanel buildingpanel=new FloorPanel(f,buildinglist);
+		  FloorPanel buildingpanel=new FloorPanel(f,buildinglist,b);
 		  buildingpanel.init();
 	      JButton close=new JButton();        close.setIcon(x);        close.setBorder(null);        close.setFocusable(false);
 	      this.addTab("Floor: "+f.name, null, buildingpanel,"Floor: "+f.name);

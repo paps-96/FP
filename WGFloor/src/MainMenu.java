@@ -132,7 +132,17 @@ class MainMenu extends JFrame {
 			}});
         mainpanel.add(deletebuild);
         mainpanel.add(new JLabel());mainpanel.add(new JLabel());
-        mainpanel.add(new JLabel());
+        JButton report=new JButton("Report Tab");
+        mainpanel.add(report);
+        report.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				if(!tabAlreadyOpen("Report")) {
+					reporttab();
+				}
+			}
+        });
+        
         JButton adduser=new JButton("Add New User");
         adduser.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
@@ -234,6 +244,28 @@ class MainMenu extends JFrame {
 			public void actionPerformed(ActionEvent e)
 				  {
 					tabPane.remove(buildingpanel);
+				  }
+				}
+	       );
+	        	
+	}
+	
+	public void reporttab() {
+		
+		  ReportPanel reportpanel=new ReportPanel(buildinglist);
+		  reportpanel.init();
+	      JButton close=new JButton();        close.setIcon(x);        close.setBorder(null);        close.setFocusable(false);
+	      tabPane.addTab("Report", null, reportpanel,"Report");
+	      JPanel tab=new JPanel();
+	      tab.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 0));
+	      tab.add(new JLabel("Report"));
+	      tab.add(close);
+	      tabPane.indexOfComponent(reportpanel);
+	      tabPane.setTabComponentAt(tabPane.indexOfComponent(reportpanel),tab);
+	      close.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e)
+				  {
+					tabPane.remove(reportpanel);
 				  }
 				}
 	       );
