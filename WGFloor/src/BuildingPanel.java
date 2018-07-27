@@ -52,7 +52,7 @@ public class BuildingPanel extends JTabbedPane {
         mainpanel.setLayout(new GridLayout(7,2));
         mainpanel.add(new JLabel());
         JButton showbuilding=new JButton("Show Floor");
-        mainpanel.add(showbuilding);
+        
         showbuilding.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
@@ -66,7 +66,7 @@ public class BuildingPanel extends JTabbedPane {
 					}
 				}			}
         });
-        mainpanel.add(new JLabel());mainpanel.add(new JLabel());
+        mainpanel.add(new JLabel());mainpanel.add(new JLabel());mainpanel.add(showbuilding);
         mainpanel.add(new JLabel());
     	floors.addItem("-Select Floor-");
     	if (b.floors!=null) {
@@ -77,7 +77,7 @@ public class BuildingPanel extends JTabbedPane {
 
 
         JButton addbuilding =new JButton("Add New Floor");
-        mainpanel.add(addbuilding);
+        
         addbuilding.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				AddFloor m=new AddFloor(b,floors,buildinglist);
@@ -89,7 +89,8 @@ public class BuildingPanel extends JTabbedPane {
 
 			}
         });
-        mainpanel.add(floors);mainpanel.add(new JLabel());
+        
+        mainpanel.add(new JLabel());mainpanel.add(floors);mainpanel.add(addbuilding);
         mainpanel.add(new JLabel());
         JButton deletebuild=new JButton("Delete Floor");
         deletebuild.addActionListener(new ActionListener() {
@@ -107,73 +108,11 @@ public class BuildingPanel extends JTabbedPane {
 
 				
 			}});
-        mainpanel.add(deletebuild);
+        
         mainpanel.add(new JLabel());mainpanel.add(new JLabel());
+        mainpanel.add(deletebuild);mainpanel.add(new JLabel());
         mainpanel.add(new JLabel());
-        JButton adduser=new JButton("Generate building report");
-        adduser.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e)
-			  {
-				int allws=0;
-				int empl=0;
-				for (Floor f:b.floors.values()) {
-					FloorPanel l=new FloorPanel(f,buildinglist,b);
-					//l.init();
-					allws+=f.ws.size();
-					try {
-						empl+=l.setColor().size();
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-				}
-				int avws=allws-empl;
 
-				Document document = new Document(PageSize.A6);
-
-				
-				try {
-					PdfWriter.getInstance(document, new FileOutputStream(b.name+".pdf"));
-					document.open();
-					Paragraph hello=new Paragraph("Building: "+ b.name);
-					hello.add("\n");
-					hello.add("Adress: "+b.address);
-					hello.add("\n");
-					hello.add("\n");
-					hello.add("Report for Building: "+b.name);
-					hello.add("\n");
-					hello.add("\n");
-					hello.add("\n");
-					hello.add("\n");
-					hello.add("Number of employees: " + Integer.toString(empl));
-					hello.add("\n");
-					hello.add("Number of worksations: "+ Integer.toString(allws));
-					hello.add("\n");
-					hello.add("Available worksations: "+ Integer.toString(avws));
-					//PdfContentByte canvas = writer.getDirectContentUnder();
-					Image image = Image.getInstance("src/menu.png");
-					//image.scaleAbsolute(PageSize.A6.getBorderWidth(),10);
-					//image.setAbsolutePosition(0, 0);
-					image.scaleToFit(240, 150);
-					document.add(image);
-					document.add(hello);
-					
-					
-
-				} catch (FileNotFoundException | DocumentException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				 
-				document.close();
-				
-				
-			  }
-			});
-        mainpanel.add(adduser);
         border.add(mainpanel, BorderLayout.CENTER);
         border.add(new JLabel(new ImageIcon(getClass().getResource("menu.png"))),BorderLayout.SOUTH);
         maintab.add(border);

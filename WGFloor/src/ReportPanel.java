@@ -9,7 +9,11 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Reader;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -85,10 +89,23 @@ public class ReportPanel extends JPanel {
             }
         });
     	
-    	JCheckBox dep=new JCheckBox("Show department details");
+    	JCheckBox dep=new JCheckBox("Show departments details");
     	JCheckBox people = new JCheckBox("List people");
+    	JComboBox<String> deplist = new JComboBox<String>();
+    	deplist.addItem("All");deplist.addItem("HR");deplist.addItem("Receptionist");    	deplist.addItem("A&F");    	deplist.addItem("Gym");
     	JPanel boxes=new JPanel();boxes.setLayout(new FlowLayout());
-    	boxes.add(dep);boxes.add(people);
+    	boxes.add(people);boxes.add(dep);boxes.add(new JLabel("Show specific Department"));boxes.add(deplist);
+    	dep.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				if(dep.isSelected()) {
+					deplist.setEnabled(false);
+				}else {
+					deplist.setEnabled(true);
+
+				}
+			}});
     	main.add(boxes);
     	JCheckBox male=new JCheckBox("Male");
     	male.setSelected(true);
@@ -117,17 +134,31 @@ public class ReportPanel extends JPanel {
 				int total=0;
 				int hr=0;int rec=0; int gym=0;int af=0;
 				ArrayList<String> p=new ArrayList<String>();
+				ArrayList<String> hrp=new ArrayList<String>();
+				ArrayList<String> recp=new ArrayList<String>();
+				ArrayList<String> afp=new ArrayList<String>();
+				ArrayList<String> gymp=new ArrayList<String>();
 				reportarea.setText(null);;
-				Reader in = null;
+				Reader reader = null;
+				
 				try {
-					in = new FileReader("db.csv");
-				} catch (FileNotFoundException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+				URL url=new URL("https://raw.githubusercontent.com/paps-96/FP/final3/db.csv");
+
+				InputStream input = url.openStream();
+				reader = new InputStreamReader(input, "UTF-8");
+
+
+			} catch (MalformedURLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+
 				Iterable<CSVRecord> records = null;
 				try {
-					records = CSVFormat.EXCEL.parse(in);
+					records = CSVFormat.EXCEL.parse(reader);
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -151,38 +182,48 @@ public class ReportPanel extends JPanel {
 									total++;
 									if (record.get(4).equals("HR")){
 										hr++;
+										hrp.add(record.get(0));
 									}else if(record.get(4).equals("Receptionist")) {
 										rec++;
+										recp.add(record.get(0));
 									}else if(record.get(4).equals("A&F")) {
 										af++;
+										afp.add(record.get(0));
 									}else if(record.get(4).equals("Gym")) {
 										gym++;
+										gymp.add(record.get(0));
 									}
 									p.add(record.get(0));
 								}else if(male.isSelected()&& !female.isSelected()&&record.get(5).equals("male")) {
-									
 									total++;
 									if (record.get(4).equals("HR")){
 										hr++;
+										hrp.add(record.get(0));
 									}else if(record.get(4).equals("Receptionist")) {
 										rec++;
+										recp.add(record.get(0));
 									}else if(record.get(4).equals("A&F")) {
 										af++;
+										afp.add(record.get(0));
 									}else if(record.get(4).equals("Gym")) {
 										gym++;
+										gymp.add(record.get(0));
 									}
 									p.add(record.get(0));
 								}else if(male.isSelected()&& !female.isSelected()&&record.get(5).equals("female")) {
-									
 									total++;
 									if (record.get(4).equals("HR")){
 										hr++;
+										hrp.add(record.get(0));
 									}else if(record.get(4).equals("Receptionist")) {
 										rec++;
+										recp.add(record.get(0));
 									}else if(record.get(4).equals("A&F")) {
 										af++;
+										afp.add(record.get(0));
 									}else if(record.get(4).equals("Gym")) {
 										gym++;
+										gymp.add(record.get(0));
 									}
 									p.add(record.get(0));
 								}
@@ -197,38 +238,48 @@ public class ReportPanel extends JPanel {
 									total++;
 									if (record.get(4).equals("HR")){
 										hr++;
+										hrp.add(record.get(0));
 									}else if(record.get(4).equals("Receptionist")) {
 										rec++;
+										recp.add(record.get(0));
 									}else if(record.get(4).equals("A&F")) {
 										af++;
+										afp.add(record.get(0));
 									}else if(record.get(4).equals("Gym")) {
 										gym++;
+										gymp.add(record.get(0));
 									}
 									p.add(record.get(0));
 								}else if(male.isSelected()&& !female.isSelected()&&record.get(5).equals("male")) {
-									
 									total++;
 									if (record.get(4).equals("HR")){
 										hr++;
+										hrp.add(record.get(0));
 									}else if(record.get(4).equals("Receptionist")) {
 										rec++;
+										recp.add(record.get(0));
 									}else if(record.get(4).equals("A&F")) {
 										af++;
+										afp.add(record.get(0));
 									}else if(record.get(4).equals("Gym")) {
 										gym++;
+										gymp.add(record.get(0));
 									}
 									p.add(record.get(0));
 								}else if(male.isSelected()&& !female.isSelected()&&record.get(5).equals("female")) {
-									
 									total++;
 									if (record.get(4).equals("HR")){
 										hr++;
+										hrp.add(record.get(0));
 									}else if(record.get(4).equals("Receptionist")) {
 										rec++;
+										recp.add(record.get(0));
 									}else if(record.get(4).equals("A&F")) {
 										af++;
+										afp.add(record.get(0));
 									}else if(record.get(4).equals("Gym")) {
 										gym++;
+										gymp.add(record.get(0));
 									}
 									p.add(record.get(0));
 								}
@@ -243,58 +294,98 @@ public class ReportPanel extends JPanel {
 							total++;
 							if (record.get(4).equals("HR")){
 								hr++;
+								hrp.add(record.get(0));
 							}else if(record.get(4).equals("Receptionist")) {
 								rec++;
+								recp.add(record.get(0));
 							}else if(record.get(4).equals("A&F")) {
 								af++;
+								afp.add(record.get(0));
 							}else if(record.get(4).equals("Gym")) {
 								gym++;
+								gymp.add(record.get(0));
 							}
 							p.add(record.get(0));
 						}else if(male.isSelected()&& !female.isSelected()&&record.get(5).equals("male")) {
-							
 							total++;
 							if (record.get(4).equals("HR")){
 								hr++;
+								hrp.add(record.get(0));
 							}else if(record.get(4).equals("Receptionist")) {
 								rec++;
+								recp.add(record.get(0));
 							}else if(record.get(4).equals("A&F")) {
 								af++;
+								afp.add(record.get(0));
 							}else if(record.get(4).equals("Gym")) {
 								gym++;
+								gymp.add(record.get(0));
 							}
 							p.add(record.get(0));
-						}else if(male.isSelected()&& !female.isSelected()&&record.get(5).equals("female")) {
-							
+						}else if(!male.isSelected()&& female.isSelected()&&record.get(5).equals("female")) {
 							total++;
 							if (record.get(4).equals("HR")){
 								hr++;
+								hrp.add(record.get(0));
 							}else if(record.get(4).equals("Receptionist")) {
 								rec++;
+								recp.add(record.get(0));
 							}else if(record.get(4).equals("A&F")) {
 								af++;
+								afp.add(record.get(0));
 							}else if(record.get(4).equals("Gym")) {
 								gym++;
+								gymp.add(record.get(0));
 							}
 							p.add(record.get(0));
 						}
 					}
-					total--;
-					if (p.size()>0) {
-						p.remove(0);
-
+					if((male.isSelected() && female.isSelected())||(!male.isSelected() && !female.isSelected())) {
+						total--;
+						if (p.size()>0) {
+							p.remove(0);
+						}
 					}
 				}
 				
 				reportarea.append("Total people: "+total+"\n\n");
 				if (dep.isSelected()) {
-					reportarea.append("HR: "+hr+"\nReceptionist: "+rec+"\nA&F: "+af+"\nGym: "+gym+"\n\n");
+					reportarea.append("By Department:\n\nHR: "+hr+"\nReceptionist: "+rec+"\nA&F: "+af+"\nGym: "+gym+"\n\n");
+				}else {
+					if(deplist.getSelectedItem().equals("HR")) {
+						reportarea.append("HR People: "+ hr+"\n\n");
+					}else if(deplist.getSelectedItem().equals("Receptionist")) {
+						reportarea.append("Receptionist People: "+ rec+"\n\n");
+					}else if(deplist.getSelectedItem().equals("A&F")) {
+						reportarea.append("A&F People: "+ af+"\n\n");
+					}else if(deplist.getSelectedItem().equals("Gym")) {
+						reportarea.append("Gym People: "+ gym+"\n\n");
+					}
 				}
 				if (people.isSelected()) {
 					reportarea.append("List of people: \n\n");
-					for (String person:p) {
-						reportarea.append(person+"\n");
+					if (deplist.getSelectedIndex()==0) {
+						for (String person:p) {
+							reportarea.append(person+"\n");
+						}
+					}else if (deplist.getSelectedIndex()==1) {
+						for (String person:hrp) {
+							reportarea.append(person+"\n");
+						}
+					}else if (deplist.getSelectedIndex()==2) {
+						for (String person:recp) {
+							reportarea.append(person+"\n");
+						}
+					}else if (deplist.getSelectedIndex()==3) {
+						for (String person:afp) {
+							reportarea.append(person+"\n");
+						}
+					}else if (deplist.getSelectedIndex()==4) {
+						for (String person:gymp) {
+							reportarea.append(person+"\n");
+						}
 					}
+					
 				}
 
 			}

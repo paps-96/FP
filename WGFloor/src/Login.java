@@ -29,7 +29,16 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
+
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVRecord;
+import org.apache.commons.io.FileUtils;
+
 import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
 
 
 //Log In Frame
@@ -90,6 +99,33 @@ public class Login extends JFrame {
 						if (userlist.get(uname.getText()) instanceof Admin ) {
 							MainMenu m=new MainMenu(userlist);
 							m.init();
+							/*try {
+								URL url=new URL("https://gist.githubusercontent.com/davidnunez/5536346/raw/9cd6ed459b3d259508d2b9091f96a79678984953/data.csv");
+								////ReadableByteChannel rbc = Channels.newChannel(url.openStream());
+								//FileOutputStream fos = new FileOutputStream("information.csv");
+								//fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+								InputStream input = url.openStream();
+								Reader reader = new InputStreamReader(input, "UTF-8");
+								Iterable<CSVRecord> records = null;
+								try {
+									records = CSVFormat.EXCEL.parse(reader);
+								} catch (IOException e1) {
+									// TODO Auto-generated catch block
+									e1.printStackTrace();
+								}
+								for (CSVRecord record : records) {
+									System.out.println(record.get(0));
+								}
+							} catch (MalformedURLException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							} catch (IOException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}*/
+
+
+
 						}else {
 							UserMenu u=new UserMenu(userlist);
 							u.init();

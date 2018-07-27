@@ -19,8 +19,11 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.ObjectOutputStream;
 import java.io.Reader;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -75,7 +78,7 @@ public class FloorPanel extends JPanel {
 	JPanel buttons;
 	JLabel av;
 	JLabel all;
-	int sqrsize=17;
+	int sqrsize=8;
 	
 	JPanel floorplanarea=new JPanel() {
 		@Override
@@ -156,7 +159,7 @@ public class FloorPanel extends JPanel {
 		JButton finish = new JButton("Done");
 		adding.add(finish);
 		
-		JSlider slider = new JSlider(JSlider.VERTICAL, 8, 34, 17);
+		JSlider slider = new JSlider(JSlider.VERTICAL, 8, 34, 8);
 		slider.setToolTipText("Set workstation size");
 		slider.addChangeListener(new ChangeListener() {
 
@@ -185,9 +188,8 @@ public class FloorPanel extends JPanel {
 		});
 		
 		JButton remove=new JButton("Remove Workstation");
-		JButton report=new JButton("Generate Floor Report");		
 		buttons=new JPanel(new FlowLayout());
-		buttons.add(update);buttons.add(add);buttons.add(remove);buttons.add(report);
+		buttons.add(update);buttons.add(add);buttons.add(remove);
 		main.add(buttons);
 		
 		
@@ -258,7 +260,7 @@ public class FloorPanel extends JPanel {
 	        	   
 	        	   String tip=null;
 			        for (Map.Entry<String,Point> p:f.ws.entrySet()) {
-			        	if(new Rectangle(p.getValue().x, p.getValue().y, 17, 17).contains(me.getPoint())) {
+			        	if(new Rectangle(p.getValue().x, p.getValue().y, getsqrsize(), getsqrsize()).contains(me.getPoint())) {
 				        	try {
 								tip=("Workstation ID: "+p.getKey()+setWSHolder(p.getKey()));
 							} catch (IOException e) {
@@ -275,53 +277,6 @@ public class FloorPanel extends JPanel {
 	        }); 
 	      
 	      
-	      report.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-
-				Document document = new Document(PageSize.A6);
-
-				
-				try {
-					PdfWriter.getInstance(document, new FileOutputStream(b.name+"-"+f.name+".pdf"));
-					document.open();
-					Paragraph hello=new Paragraph("Building: "+ b.name);
-					hello.add("\n");
-					hello.add("Adress: "+b.address);
-					hello.add("\n");
-					hello.add("\n");
-					hello.add("Report for Floor: "+f.name);
-					hello.add("\n");
-					hello.add("\n");
-					hello.add("\n");
-					hello.add("\n");
-					hello.add("Number of employees: " + Integer.toString(setColor().size()));
-					hello.add("\n");
-					hello.add("Number of worksations: "+all.getText());
-					hello.add("\n");
-					hello.add("Available worksations: "+av.getText());
-					//PdfContentByte canvas = writer.getDirectContentUnder();
-					Image image = Image.getInstance("src/menu.png");
-					//image.scaleAbsolute(PageSize.A6.getBorderWidth(),10);
-					//image.setAbsolutePosition(0, 0);
-					image.scaleToFit(240, 150);
-					document.add(image);
-					document.add(hello);
-					
-
-				} catch (FileNotFoundException | DocumentException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				 
-				document.close();				
-			}
-	    	  
-	      });
-		
-		
 	}
 	
 	public JPanel deletePanel() {
@@ -379,8 +334,12 @@ public class FloorPanel extends JPanel {
 	}
 	
 	public ArrayList<String> setColor() throws IOException {
-		Reader in = new FileReader("db.csv");
-		Iterable<CSVRecord> records = CSVFormat.EXCEL.parse(in);
+		URL url=new URL("https://raw.githubusercontent.com/paps-96/FP/final3/db.csv");
+
+		InputStream input = url.openStream();
+		Reader reader = new InputStreamReader(input, "UTF-8");
+
+		Iterable<CSVRecord> records = CSVFormat.EXCEL.parse(reader);
 		ArrayList<String> wss=new ArrayList<String>();
 		for (CSVRecord record : records) {
 			if (record.get(2).equals(f.name) && record.get(1).equals(b.name) ) {
@@ -393,8 +352,12 @@ public class FloorPanel extends JPanel {
 	}
 
 	public String setWSHolder(String wsID) throws IOException {
-		Reader in = new FileReader("db.csv");
-		Iterable<CSVRecord> records = CSVFormat.EXCEL.parse(in);
+		URL url=new URL("https://raw.githubusercontent.com/paps-96/FP/final3/db.csv");
+
+		InputStream input = url.openStream();
+		Reader reader = new InputStreamReader(input, "UTF-8");
+
+		Iterable<CSVRecord> records = CSVFormat.EXCEL.parse(reader);
 		String name="";
 		for (CSVRecord record : records) {
 			if(record.get(3).equals(wsID)&&record.get(2).equals(f.name) && record.get(1).equals(b.name) ) {
